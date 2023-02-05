@@ -1,0 +1,27 @@
+.cards .mock-card {
+  min-width: 110px;
+  min-height: 105px;
+  cursor: pointer;
+}
+
+.cards .mock-card p {
+  margin-bottom: 0;
+}
+
+.cards .stars img {
+  width: 25px;
+}
+
+@media (min-width: 320px) {
+  .cards .mock-card {
+    width: 100%;
+    min-height: min-content;
+  }
+}
+
+@media (min-width: 375px) {
+  .cards .mock-card {
+    width: 100%;
+    min-height: min-content;
+  }
+}

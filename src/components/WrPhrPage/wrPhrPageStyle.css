@@ -1,0 +1,27 @@
+.table-words {
+  border-bottom: 1px solid;
+  margin-bottom: 5px;
+  padding-bottom: 7px;
+}
+
+.table-words p {
+  margin-right: 5px;
+  margin-bottom: 0px;
+}
+
+.table-words .btn-info,
+.table-words .btn {
+  margin-left: 10px;
+  margin-top: 5px;
+}
+.table-words .time {
+  font-size: 10px;
+}
+.table-words .stars img {
+  width: 12px;
+}
+
+.word-meaning {
+  display: flex;
+  flex-wrap: wrap;
+}

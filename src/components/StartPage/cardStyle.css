@@ -1,0 +1,30 @@
+.info-card {
+  max-width: 35rem;
+}
+
+@media (min-width: 576px) {
+}
+
+@media (min-width: 768px) {
+  .info-card {
+    max-width: 20rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .info-card {
+    max-width: 28rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .info-card {
+    max-width: 35rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .info-card {
+    max-width: 50rem;
+  }
+}
