@@ -29,7 +29,6 @@ const wordsSlice = createSlice({
       state.words = state.words.filter((w) => {
         return w.wordId !== action.payload.wordId;
       });
-      // state.words = state.words;
     },
   },
 });

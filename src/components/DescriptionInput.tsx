@@ -10,6 +10,7 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({
   return (
     <label>
       <input
+        className="form-control"
         placeholder="description"
         value={value}
         onChange={(e) => setValue(e.target.value)}

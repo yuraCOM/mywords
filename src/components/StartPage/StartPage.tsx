@@ -9,7 +9,7 @@ const StartPage: FC = () => {
   let dataLocalStore: string | null = localStorage.getItem("MyWords");
   return (
     <>
-      {dataLocalStore && !userAuth.isConnect && <WarningDisconect />}
+      {/* {dataLocalStore && !userAuth.isConnect && <WarningDisconect />} */}
       <div className="d-flex flex-wrap justify-content-center">
         {startInfoText.map((block, index) => (
           <InfoCard key={index + "infoblock"} info={block} />

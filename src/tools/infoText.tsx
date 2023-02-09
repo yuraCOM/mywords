@@ -2,6 +2,9 @@ export type infoBlock = {
   bgColor: string;
   head?: string;
   text: string;
+  text1?: string;
+  text2?: string;
+  text3?: string;
 };
 
 export const startInfoText: infoBlock[] = [

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import "./cardsStyle.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { randomN } from "../../tools/random";
@@ -16,6 +16,7 @@ interface CardsProps {
 
 const Cards: FC<CardsProps> = () => {
   const dispatch = useAppDispatch();
+
   // все слова юзера
   const wordsArr = useAppSelector((state) => state.words.words);
 
@@ -28,6 +29,17 @@ const Cards: FC<CardsProps> = () => {
     getCardHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  //   if (user.isAuth && user.isConnect) {
+  //     console.log("useEffect Cards state ", wordsArr);
+  //     updateLocalStoreWordsArr(wordsArr);
+  //     updWordInFireBase(user.login, wordsArr);
+  //   }
+  //   // зависимость от wordsArr - при его изменении - автоматом обновляется локал стор слов
+  //   // и записівается обновленній стор в базу в облаке
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [wordsArr]);
 
   const getCardHandler = async () => {
     dispatch(addCards(await getCardWords(wordsArr)));

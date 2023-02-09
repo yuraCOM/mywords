@@ -1,24 +1,25 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { updateFBWords } from "../../FireBase/FireBaseService";
 import { addCards } from "../../store/cardsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { CARDS_ROUTE } from "../../tools/constant";
+import { randomN } from "../../tools/random";
 import { meanWords, ucFirst } from "../../tools/serveses";
+import Stars from "../../UI/Stars";
 import { getCardWords } from "./cardsTools";
 
 const Answer: FC = () => {
   const dispatch = useAppDispatch();
   const cardsState = useAppSelector((state) => state.cards.cards);
-  const wordNow = cardsState.hiddenWord;
   const wordsArr = useAppSelector((state) => state.words.words);
-  const user = useAppSelector((state) => state.userAuthorization);
-  const history = useNavigate();
+  let wordNow = { ...cardsState.hiddenWord };
+  wordsArr.forEach((i) => {
+    if (i.wordId === wordNow.wordId) {
+      wordNow = i;
+    }
+  });
 
-  useEffect(() => {
-    updateFBWords(user.login, wordsArr);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const history = useNavigate();
 
   async function nextCardHandler() {
     dispatch(addCards(await getCardWords(wordsArr)));
@@ -26,7 +27,7 @@ const Answer: FC = () => {
   }
 
   return (
-    <div className="answer d-flex justify-content-center flex-column align-items-center">
+    <div className="answer d-flex justify-content-center flex-column">
       <div
         className={
           cardsState.answer
@@ -51,6 +52,9 @@ const Answer: FC = () => {
             <span className="mx-2">word:</span>{" "}
             <h2> {ucFirst(wordNow.word)}</h2>
           </div>
+          <div className="stars d-flex justify-content-center">
+            <Stars word={wordNow} random={() => randomN()} />
+          </div>
 
           <p className="text-center fs-4 fst-italic">
             <span className="mx-2 fs-5">meaning:</span>
@@ -66,8 +70,8 @@ const Answer: FC = () => {
         type="button"
         className={
           !cardsState.answer
-            ? "btn btn-outline-danger btn-lg"
-            : "btn btn-outline-success btn-lg"
+            ? "btn btn-outline-danger btn-lg align-self-center"
+            : "btn btn-outline-success btn-lg align-self-center"
         }
         onClick={() => nextCardHandler()}
       >

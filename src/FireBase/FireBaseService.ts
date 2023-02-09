@@ -35,6 +35,15 @@ export async function readAllDB() {
   });
 }
 
+// get Users Words
+export async function fetchUserWordsFromFB(login: string): Promise<Word[]> {
+  const user = query(usersRef, where("login", "==", login));
+  const querySnapshot = await getDocs(user);
+  // console.log("querySnapshot: ", await querySnapshot.docs[0].data().words);
+  let wordsArr = await querySnapshot.docs[0].data().words;
+  return wordsArr;
+}
+
 // получить из базы уникальный ID который присваивает сама FireBase - получаем  через логин пользователя
 export async function getIDUserFromDB(login: string): Promise<string> {
   const user = query(usersRef, where("login", "==", login));
@@ -118,7 +127,5 @@ export async function updWordInFireBase(
 }
 
 export async function updateFBWords(login: string, wordsArr: Word[]) {
-  console.log(wordsArr);
-
   await updWordInFireBase(login, wordsArr);
 }

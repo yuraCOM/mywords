@@ -11,6 +11,9 @@
 .cards .stars img {
   width: 25px;
 }
+.answer .stars img {
+  width: 20px;
+}
 
 @media (min-width: 320px) {
   .cards .mock-card {

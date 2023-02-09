@@ -1,5 +1,10 @@
 .header {
-  /* background-color: #dee2e6; */
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ced4da;
   border-bottom: 2px solid;
 }
 

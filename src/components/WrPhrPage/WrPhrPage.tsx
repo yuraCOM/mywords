@@ -1,16 +1,17 @@
 // Страница всего словаря
 
-import { FC, ReactNode, useState } from "react";
+import { ChangeEvent, FC, ReactNode, useState } from "react";
 import "./wrPhrPageStyle.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { Word } from "../../store/types";
 import { randomN } from "../../tools/random";
 import { meanWords, ucFirst } from "../../tools/serveses";
-import { deleteWords, getUserWords } from "../../store/wordsSlice";
+import { deleteWords } from "../../store/wordsSlice";
 import Stars from "../../UI/Stars";
-import moment from "moment";
 import MySelect from "../../UI/MySelect";
 import WarningDisconect from "../../UI/WarningDisconect";
+import MyModal from "../../UI/MyModal";
+import { dateWord, getFindWord } from "./ToolsWrPhrPage";
 
 interface WrPhrPageProps {
   children?: ReactNode;
@@ -23,78 +24,84 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
 
   const [selectedSort, setSelectedSort] = useState("");
 
+  const [findWord, setFineWord] = useState("");
+  const [findWordsArr, setFindWorsdArr] = useState(wordsArr);
+
   const delWord = async (word: Word) => {
-    let isBoss = window.confirm("Are you sure? Delete word?");
-    if (isBoss) {
+    let isDelete = window.confirm("Are you sure? Delete word?");
+    if (isDelete) {
       dispatch(deleteWords(word));
     }
   };
 
-  const infoWord = (word: string | undefined) => {
-    console.log(word);
-  };
-
-  const dateWord = (data: string) => {
-    var date = Number(data.slice(5));
-    return moment(date).format("'MMM Do YY, h:mm:ss a'");
-  };
-
   const sortWords = (sort: string) => {
     setSelectedSort(sort);
-    if (sort === "wordUP") {
-      let sortedWords: Word[] = [...wordsArr].sort((a: Word, b: Word) =>
+    let sortedWords: Word[] = [];
+    if (sort === "wordUp") {
+      sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
         a.word.localeCompare(b.word)
       );
-      dispatch(getUserWords({ words: sortedWords }));
     }
     if (sort === "wordDown") {
-      let sortedWords: Word[] = [...wordsArr].sort((a: Word, b: Word) =>
+      sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
         b.word.localeCompare(a.word)
       );
-      dispatch(getUserWords({ words: sortedWords }));
     }
     if (sort === "rating") {
-      let sortedWords: Word[] = [...wordsArr].sort(
+      sortedWords = [...wordsArr].sort(
         (a: Word, b: Word) => b.rating - a.rating
       );
-      dispatch(getUserWords({ words: sortedWords }));
     }
     if (sort === "dateUp") {
-      let sortedWords: Word[] = [...wordsArr].sort(
+      sortedWords = [...wordsArr].sort(
         (a: Word, b: Word) =>
           Number(b.wordId.slice(5)) - Number(a.wordId.slice(5))
       );
-      dispatch(getUserWords({ words: sortedWords }));
     }
     if (sort === "dateDown") {
-      console.log("sort: ", sort);
-
-      let sortedWords: Word[] = [...wordsArr].sort(
+      sortedWords = [...wordsArr].sort(
         (a: Word, b: Word) =>
           Number(a.wordId.slice(5)) - Number(b.wordId.slice(5))
       );
-      dispatch(getUserWords({ words: sortedWords }));
     }
+    setFindWorsdArr(sortedWords);
   };
+
+  function wordFindHandler(e: ChangeEvent<HTMLInputElement>): void {
+    setFineWord(e.target.value);
+    let filteredArr = getFindWord(e, wordsArr);
+    setFindWorsdArr(filteredArr);
+    setSelectedSort("");
+  }
 
   return (
     <>
       {!user.isConnect && <WarningDisconect />}
-      <MySelect
-        onChange={sortWords}
-        value={selectedSort}
-        defaultValue="Sort by..."
-        options={[
-          { value: "wordUp", name: "Sort Abc > Z" },
-          { value: "wordDown", name: "Sort Zyw > A" },
-          { value: "dateDown", name: "Sort date up" },
-          { value: "dateUp", name: "Sort date down" },
-          { value: "rating", name: "Sort by stars" },
-        ]}
-      />
-      {/* {wordsArr.length === 0 && <h2>No connection to server!!! Try later</h2>} */}
+      <div className="d-flex align-items-center">
+        <MySelect
+          onChange={sortWords}
+          value={selectedSort}
+          defaultValue="Sort by..."
+          options={[
+            { value: "wordUp", name: "Sort Abc > Z" },
+            { value: "wordDown", name: "Sort Zyw > A" },
+            { value: "dateDown", name: "Sort date up" },
+            { value: "dateUp", name: "Sort date down" },
+            { value: "rating", name: "Sort by stars" },
+          ]}
+        />
+        <label>
+          <input
+            className="form-control"
+            placeholder="Find..."
+            value={findWord}
+            onChange={(e) => wordFindHandler(e)}
+          />
+        </label>
+      </div>
+
       {wordsArr &&
-        wordsArr.map((word): any => (
+        findWordsArr.map((word): any => (
           <div
             key={randomN()}
             className="table-words d-flex align-items-center"
@@ -110,19 +117,11 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
               className="word-meaning d-flex flex-row"
               style={{ flexBasis: "60%" }}
             >
-              <p>
+              <div>
+                <Stars word={word} random={() => randomN()} />
                 {meanWords(word)}
-                {word.note && (
-                  <button
-                    type="button"
-                    className="btn btn-info btn-sm btn-info"
-                    onClick={() => infoWord(word.note)}
-                  >
-                    i
-                  </button>
-                )}
-              </p>
-              <Stars word={word} random={() => randomN()} />
+              </div>
+              {word.note && <MyModal info={word} />}
             </div>
             <div className="d-flex">
               <button

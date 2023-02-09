@@ -14,6 +14,9 @@ const InfoCard: FC<InfoCardProps> = ({ info }) => {
       <div className="card-header">{info.head}</div>
       <div className="card-body">
         <p className="card-text">{info.text}</p>
+        <p className="card-text">{info.text1}</p>
+        <p className="card-text">{info.text2}</p>
+        <p className="card-text">{info.text3}</p>
       </div>
     </div>
   );

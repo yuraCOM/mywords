@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Spinner from "react-bootstrap/esm/Spinner";
 import { addWordInFireBase, testConnect } from "../../FireBase/FireBaseService";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { Word } from "../../store/types";
@@ -24,6 +25,8 @@ const NewWordAddForm: React.FC = () => {
   const [note, setNote] = useState("");
 
   const [filteredWordHelp, setFilteredWordHelp] = useState(Array<Word>);
+
+  const [spinner, setSpinner] = useState(false);
 
   const wordHandler = (e: any) => {
     let filteredArr: Word[] = [];
@@ -70,23 +73,29 @@ const NewWordAddForm: React.FC = () => {
       if (await testConnect(userLogin)) {
         dispatch(isConnect(false));
       } else {
-        dispatch(addWord(newWord)); // в стор
-        addWordInFireBase(userLogin, newWord); // добавили в облако
+        setSpinner(true);
+        dispatch(await addWord(newWord)); // в стор
+        await addWordInFireBase(userLogin, newWord); // добавили в облако
+
         setWord("");
         setType("");
         setDescription01("");
         setDescription02("");
         setDescription03("");
         setNote("");
+        setSpinner(false);
       }
     }
   };
 
   return (
     <div className="enter-word">
+      {spinner && <Spinner animation="border" variant="success" />}
+
       {!user.isConnect && <WarningDisconect />}
       <label>
         <input
+          className="form-control"
           placeholder="new word"
           value={word}
           onChange={(e) => wordHandler(e)}
@@ -94,6 +103,7 @@ const NewWordAddForm: React.FC = () => {
       </label>
       <label>
         <select
+          className="form-select"
           name="selectWrPhr"
           value={type}
           onChange={(e) => setType(e.target.value)}
@@ -108,6 +118,7 @@ const NewWordAddForm: React.FC = () => {
       <DescriptionInput value={description03} setValue={setDescription03} />
       <label>
         <textarea
+          className="form-control"
           name="textarea"
           rows={5}
           cols={32}
@@ -117,8 +128,13 @@ const NewWordAddForm: React.FC = () => {
         ></textarea>
       </label>
 
-      <div>
-        <button onClick={handleAction}>Add Word/Phrase</button>
+      <div className="m-auto">
+        <button
+          className="btn btn-outline-secondary mt-1"
+          onClick={handleAction}
+        >
+          Add Word/Phrase
+        </button>
       </div>
       <div>
         {filteredWordHelp.map((word, index) => (

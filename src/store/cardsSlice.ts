@@ -1,6 +1,5 @@
 import { CardWordsQuiz } from "./interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Word, WordArr } from "./types";
 
 const initialState = {
   cards: {} as CardWordsQuiz,

@@ -5,17 +5,20 @@ import InfoCard from "../StartPage/InfoCard";
 const User: FC = () => {
   const user = useAppSelector((state) => state.userAuthorization);
   const userWords = useAppSelector((state) => state.words.words);
+  const sevenStarsWords = userWords.filter((w) => w.rating === 7).length;
 
   const User = {
-    bgColor: "bg-info",
-    head: "User",
+    bgColor: "bg-primary ",
+    head: "User:",
     text: `Login - ${user.login}`,
+    text2: `Password - ${user.password}`,
   };
 
   const Dic = {
-    bgColor: "bg-warning",
-    head: "About your dictionary",
-    text: `In your dictionary - ${userWords.length} words, <br> `,
+    bgColor: "bg-info",
+    head: "About your dictionary:",
+    text: `In your dictionary - ${userWords.length} words`,
+    text2: `7 Stars Words - ${sevenStarsWords} words`,
   };
 
   return (

@@ -29,7 +29,7 @@ const Header: FC<HeaderProps> = ({ isAuth }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center flex-wrap header mt-3 pb-2 ">
+    <div className="d-flex justify-content-center flex-wrap header pt-2 pb-2 ">
       <Link to={START_PAGE_ROUTE} className="">
         <Button variant="outline-success">Info</Button>
       </Link>
@@ -54,11 +54,7 @@ const Header: FC<HeaderProps> = ({ isAuth }) => {
           <Link to={READ_WR_PHR_ROUTE} className="">
             <Button variant="outline-success">Word/Pharase</Button>
           </Link>
-          <Link
-            to={USER_ROUTE}
-            className=""
-            onClick={() => console.log("user")}
-          >
+          <Link to={USER_ROUTE} className="">
             <Button className="" variant="outline-success">
               User: <b>{userAuth.login}</b>
             </Button>

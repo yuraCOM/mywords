@@ -7,8 +7,7 @@ import { CardWordsQuiz } from "../../store/interface";
 
 export async function getCardWords(db: Word[]): Promise<CardWordsQuiz> {
   let filtredUserWordsRating = db.filter((word) => word.rating !== 7);
-  console.log("filtredUserWords: ", filtredUserWordsRating);
-  if (filtredUserWordsRating.length === 0) {
+  if (filtredUserWordsRating.length < 4) {
     return {} as CardWordsQuiz;
   } else {
     let CardWordsQuiz = {} as CardWordsQuiz;

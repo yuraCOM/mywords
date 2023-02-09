@@ -20,13 +20,11 @@ const VariantWordCard: FC<VariantWordCardProps> = ({ word, bgColor }) => {
   const history = useNavigate();
 
   async function checkWord(word: Word) {
-    // let;
     if (cardsArr.hiddenWord.meanOne === word.meanOne) {
       let newRating = cardsArr.hiddenWord.rating + 1;
       let updW = { ...cardsArr.hiddenWord, rating: newRating };
       dispatch(updateWords(updW)); //update ONE words in state
       dispatch(updateCardsAnswer(true));
-
       history(ANSWER_ROUTE);
     } else {
       dispatch(updateCardsAnswer(false));
