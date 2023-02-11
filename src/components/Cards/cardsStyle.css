@@ -7,9 +7,14 @@
 .cards .mock-card p {
   margin-bottom: 0;
 }
-
+.card .stars {
+  margin-bottom: 10px;
+}
 .cards .stars img {
   width: 25px;
+}
+.ans-span {
+  margin: auto;
 }
 .answer .stars img {
   width: 20px;

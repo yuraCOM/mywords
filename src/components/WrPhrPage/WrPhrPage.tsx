@@ -1,6 +1,6 @@
 // Страница всего словаря
 
-import { ChangeEvent, FC, ReactNode, useState } from "react";
+import { ChangeEvent, FC, ReactNode, useEffect, useState } from "react";
 import "./wrPhrPageStyle.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { Word } from "../../store/types";
@@ -12,6 +12,7 @@ import MySelect from "../../UI/MySelect";
 import WarningDisconect from "../../UI/WarningDisconect";
 import MyModal from "../../UI/MyModal";
 import { dateWord, getFindWord } from "./ToolsWrPhrPage";
+import WordFixModal from "./wordFixModal";
 
 interface WrPhrPageProps {
   children?: ReactNode;
@@ -31,8 +32,22 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
     let isDelete = window.confirm("Are you sure? Delete word?");
     if (isDelete) {
       dispatch(deleteWords(word));
+      setFindWorsdArr(wordsArr);
     }
   };
+
+  //modal
+  const [fixedWord, setFixedWord] = useState({} as Word);
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+    setFixedWord({} as Word);
+  };
+  const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    setFindWorsdArr(wordsArr);
+  }, [wordsArr]);
 
   const sortWords = (sort: string) => {
     setSelectedSort(sort);
@@ -74,8 +89,13 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
     setSelectedSort("");
   }
 
+  function wordFix(word: Word): void {
+    setFixedWord(word);
+    setShow(true);
+  }
+
   return (
-    <>
+    <div>
       {!user.isConnect && <WarningDisconect />}
       <div className="d-flex align-items-center">
         <MySelect
@@ -107,10 +127,11 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
             className="table-words d-flex align-items-center"
           >
             <div
-              className="d-flex flex-wrap flex-column justify-content-start "
+              className="d-flex flex-wrap flex-column justify-content-start word-in-dic"
               style={{ flexBasis: "30%" }}
+              onClick={() => wordFix(word)}
             >
-              <p>{ucFirst(word.word)}</p>
+              <p className="word-in-dic">{ucFirst(word.word)}</p>
               <p className="time">{dateWord(word.wordId)}</p>
             </div>
             <div
@@ -118,7 +139,7 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
               style={{ flexBasis: "60%" }}
             >
               <div>
-                <Stars word={word} random={() => randomN()} />
+                <Stars word={word} />
                 {meanWords(word)}
               </div>
               {word.note && <MyModal info={word} />}
@@ -134,7 +155,15 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
             </div>
           </div>
         ))}
-    </>
+      {fixedWord.word && (
+        <WordFixModal
+          show={show}
+          handleShow={handleShow}
+          handleClose={handleClose}
+          word={fixedWord}
+        />
+      )}
+    </div>
   );
 };
 

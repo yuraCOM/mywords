@@ -9,6 +9,7 @@ import { randomN } from "../../tools/random";
 import { ucFirst } from "../../tools/serveses";
 import WarningDisconect from "../../UI/WarningDisconect";
 import DescriptionInput from "../DescriptionInput";
+import SelectTypeWord from "./SelectTypeWord";
 
 const NewWordAddForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,27 +18,23 @@ const NewWordAddForm: React.FC = () => {
   const userLogin = useAppSelector((state) => state.userAuthorization.login);
   const wordsArr = useAppSelector((state) => state.words.words);
 
-  const [word, setWord] = useState("");
-  const [type, setType] = useState("");
-  const [description01, setDescription01] = useState("");
-  const [description02, setDescription02] = useState("");
-  const [description03, setDescription03] = useState("");
-  const [note, setNote] = useState("");
+  const [word, setWord] = useState({} as Word);
 
   const [filteredWordHelp, setFilteredWordHelp] = useState(Array<Word>);
 
   const [spinner, setSpinner] = useState(false);
 
   const wordHandler = (e: any) => {
+    setWord({ ...word, word: e.target.value });
+
     let filteredArr: Word[] = [];
     let findWord = e.target.value;
-    setWord(findWord);
+    // setWord(findWord);
     //--------------------------
     // if (findWord.length >= 2) {
     //   filteredArr = wordsArr.filter((item) => {
     //     return item.word.toLowerCase().includes(word.toLowerCase());
     //   });
-    //   console.log(filteredArr);
     // }
     //--------------------------
     if (findWord.length >= 2) {
@@ -54,13 +51,13 @@ const NewWordAddForm: React.FC = () => {
   const handleAction = async () => {
     let newWord: Word = {
       wordId: "Word-" + Date.now().toString(),
-      word: ucFirst(word),
-      type: type,
-      meanOne: ucFirst(description01),
-      meanTwo: ucFirst(description02),
-      meanThree: ucFirst(description03),
+      word: ucFirst(word.word) || "",
+      type: word.type || "",
+      meanOne: ucFirst(word.meanOne) || "",
+      meanTwo: ucFirst(word.meanTwo || ""),
+      meanThree: ucFirst(word.meanThree || ""),
       rating: 0,
-      note: note,
+      note: word.note || "",
     };
 
     if (!newWord.word.trim().length) {
@@ -74,15 +71,10 @@ const NewWordAddForm: React.FC = () => {
         dispatch(isConnect(false));
       } else {
         setSpinner(true);
-        dispatch(await addWord(newWord)); // в стор
-        await addWordInFireBase(userLogin, newWord); // добавили в облако
 
-        setWord("");
-        setType("");
-        setDescription01("");
-        setDescription02("");
-        setDescription03("");
-        setNote("");
+        dispatch(addWord(newWord)); // в стор
+        await addWordInFireBase(userLogin, newWord); // добавили в облако
+        setWord({} as Word);
         setSpinner(false);
       }
     }
@@ -97,25 +89,30 @@ const NewWordAddForm: React.FC = () => {
         <input
           className="form-control"
           placeholder="new word"
-          value={word}
+          value={word.word || ""}
           onChange={(e) => wordHandler(e)}
         />
       </label>
-      <label>
-        <select
-          className="form-select"
-          name="selectWrPhr"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="">--Choose type--</option>
-          <option value="word">word</option>
-          <option value="phrase">phrase</option>
-        </select>
-      </label>
-      <DescriptionInput value={description01} setValue={setDescription01} />
-      <DescriptionInput value={description02} setValue={setDescription02} />
-      <DescriptionInput value={description03} setValue={setDescription03} />
+      <SelectTypeWord newWord={word} setNewWord={setWord} />
+      <DescriptionInput
+        value={word.meanOne || ""}
+        description="meanOne"
+        word={word}
+        setWord={setWord}
+      />
+      <DescriptionInput
+        value={word.meanTwo || ""}
+        word={word}
+        description="meanTwo"
+        setWord={setWord}
+      />
+      <DescriptionInput
+        value={word.meanThree || ""}
+        description="meanThree"
+        word={word}
+        setWord={setWord}
+      />
+
       <label>
         <textarea
           className="form-control"
@@ -123,8 +120,8 @@ const NewWordAddForm: React.FC = () => {
           rows={5}
           cols={32}
           placeholder="write comments"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
+          value={word.note || ""}
+          onChange={(e) => setWord({ ...word, note: e.target.value })}
         ></textarea>
       </label>
 
@@ -140,7 +137,7 @@ const NewWordAddForm: React.FC = () => {
         {filteredWordHelp.map((word, index) => (
           <div key={randomN() + "word"} className=" d-flex">
             <p className="m-0">
-              {word.word} - {word.meanOne}{" "}
+              {word.word} - {word.meanOne}
             </p>
           </div>
         ))}

@@ -9,6 +9,16 @@
   margin-bottom: 0px;
 }
 
+.word-in-dic {
+  cursor: pointer;
+}
+
+.word-in-dic:hover {
+  text-decoration: underline;
+  font-weight: bold;
+  background-color: #0dcaf0;
+}
+
 .table-words .btn-info,
 .table-words .btn {
   margin-left: 10px;
@@ -24,4 +34,19 @@
 .word-meaning {
   display: flex;
   flex-wrap: wrap;
+}
+
+.modal-fix-word .modal-body p {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+.modal-body input,
+.modal-fix-word .modal-body select {
+  margin-bottom: 5px;
+  width: fit-content;
+}
+
+.modal-fix-word .stars img {
+  width: 16px;
 }

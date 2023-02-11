@@ -1,13 +1,12 @@
 import { Word } from "./../../store/types";
-// import { LocalStore } from "../../store/types";
 import { getRndInteger, shuffle } from "../../tools/random";
-// import { readOneWordFromFireBase } from "../../FireBase/FireBaseService";
 import { sampleWordStart } from "../../store/sample";
 import { CardWordsQuiz } from "../../store/interface";
 
 export async function getCardWords(db: Word[]): Promise<CardWordsQuiz> {
   let filtredUserWordsRating = db.filter((word) => word.rating !== 7);
-  if (filtredUserWordsRating.length < 4) {
+
+  if (filtredUserWordsRating.length === 0) {
     return {} as CardWordsQuiz;
   } else {
     let CardWordsQuiz = {} as CardWordsQuiz;
@@ -30,7 +29,6 @@ export async function getCardWords(db: Word[]): Promise<CardWordsQuiz> {
     CardWordsQuiz.mockArr = shuffle([...CardWordsQuiz.mockArr]);
 
     const starsArr = getStarsArr(CardWordsQuiz.hiddenWord.rating);
-    // CardWordsQuiz?.answer =  '';
     CardWordsQuiz.stars = starsArr;
 
     return CardWordsQuiz;
@@ -41,7 +39,6 @@ export function getStarsArr(num: number): Array<boolean> {
   let starsArr = [];
   for (let index = 0; index < num; index++) {
     starsArr.push(true);
-    // starsArr.push(<img src={require("../../assets/starEllow.png")} alt="starEllo" />)
   }
   while (starsArr.length < 7) {
     starsArr.push(false);

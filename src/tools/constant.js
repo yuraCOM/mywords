@@ -16,3 +16,11 @@ export const bgColorArr = [
   "bg-danger",
   //   "bg-light",
 ];
+
+export const answerSound = new Audio(
+  require("../../src/assets/sounds/multiashnogo-nagatiya.mp3")
+);
+
+export const nextSound = new Audio(require("../../src/assets/sounds/lift.mp3"));
+export const verno = new Audio(require("../../src/assets/sounds/verno.mp3"));
+export const wrong = new Audio(require("../../src/assets/sounds/wrong.mp3"));

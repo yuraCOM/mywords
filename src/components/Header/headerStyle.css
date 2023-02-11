@@ -1,5 +1,6 @@
 .header {
   position: fixed;
+  align-items: center;
   z-index: 999;
   top: 0;
   left: 0;
@@ -10,4 +11,12 @@
 
 .header a {
   margin: 15px;
+}
+
+.soundBtn {
+  height: 40px;
+}
+
+.soundBtn img {
+  width: 20px;
 }

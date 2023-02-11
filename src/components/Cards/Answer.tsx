@@ -2,8 +2,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { addCards } from "../../store/cardsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { CARDS_ROUTE } from "../../tools/constant";
-import { randomN } from "../../tools/random";
+import { CARDS_ROUTE, nextSound, verno, wrong } from "../../tools/constant";
 import { meanWords, ucFirst } from "../../tools/serveses";
 import Stars from "../../UI/Stars";
 import { getCardWords } from "./cardsTools";
@@ -11,7 +10,9 @@ import { getCardWords } from "./cardsTools";
 const Answer: FC = () => {
   const dispatch = useAppDispatch();
   const cardsState = useAppSelector((state) => state.cards.cards);
+  const userState = useAppSelector((state) => state.userAuthorization);
   const wordsArr = useAppSelector((state) => state.words.words);
+
   let wordNow = { ...cardsState.hiddenWord };
   wordsArr.forEach((i) => {
     if (i.wordId === wordNow.wordId) {
@@ -19,10 +20,15 @@ const Answer: FC = () => {
     }
   });
 
+  if (userState.isSound) {
+    cardsState.answer ? verno.play() : wrong.play();
+  }
+
   const history = useNavigate();
 
   async function nextCardHandler() {
     dispatch(addCards(await getCardWords(wordsArr)));
+    userState.isSound && nextSound.play();
     history(CARDS_ROUTE);
   }
 
@@ -49,21 +55,25 @@ const Answer: FC = () => {
         </div>
         <div className="card-body">
           <div className="card-text d-flex justify-content-center text-center fs-5 fst-italic">
-            <span className="mx-2">word:</span>{" "}
+            <span className="mx-2 ans-span">word:</span>{" "}
             <h2> {ucFirst(wordNow.word)}</h2>
           </div>
           <div className="stars d-flex justify-content-center">
-            <Stars word={wordNow} random={() => randomN()} />
+            <Stars word={wordNow} />
           </div>
 
           <p className="text-center fs-4 fst-italic">
             <span className="mx-2 fs-5">meaning:</span>
             {meanWords(wordNow)}
           </p>
-          <p className="text-center">
-            <span className="mx-2">comments:</span>
-            {wordNow.note}
-          </p>
+
+          {wordNow.note ? (
+            <p className="text-center">
+              <span className="mx-2">comments:</span> {wordNow.note}{" "}
+            </p>
+          ) : (
+            false
+          )}
         </div>
       </div>
       <button

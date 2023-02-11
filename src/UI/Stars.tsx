@@ -5,9 +5,9 @@ import { randomN } from "../tools/random";
 
 interface StarsProps {
   word: Word;
-  random: () => string;
+  // random: () => string;
 }
-const Stars: FC<StarsProps> = ({ word, random }) => {
+const Stars: FC<StarsProps> = ({ word }) => {
   let stars = getStarsArr(word.rating);
   return (
     <div className="stars">
@@ -15,7 +15,7 @@ const Stars: FC<StarsProps> = ({ word, random }) => {
         if (star) {
           return (
             <img
-              key={random()}
+              key={randomN()}
               src={require("../assets/starEllow.png")}
               alt="star"
             />

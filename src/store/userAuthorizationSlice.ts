@@ -5,6 +5,7 @@ type userAuthinitialState = {
   login: string;
   password: string;
   isConnect: boolean;
+  isSound?: boolean;
 };
 
 const initialState: userAuthinitialState = {
@@ -12,6 +13,7 @@ const initialState: userAuthinitialState = {
   login: "",
   password: "",
   isConnect: false,
+  isSound: true,
 };
 
 const userAuthorizationSlice = createSlice({
@@ -32,9 +34,13 @@ const userAuthorizationSlice = createSlice({
     isConnect(state, action) {
       state.isConnect = action.payload.isConnect;
     },
+    isSound(state) {
+      state.isSound ? (state.isSound = false) : (state.isSound = true);
+    },
   },
 });
 
-export const { isLogin, logOut, isConnect } = userAuthorizationSlice.actions;
+export const { isLogin, logOut, isConnect, isSound } =
+  userAuthorizationSlice.actions;
 
 export default userAuthorizationSlice.reducer;

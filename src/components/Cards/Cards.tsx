@@ -9,6 +9,7 @@ import Answer from "./Answer";
 import { ucFirst } from "../../tools/serveses";
 import Stars from "../../UI/Stars";
 import WarningDisconect from "../../UI/WarningDisconect";
+import { answerSound, nextSound } from "../../tools/constant";
 
 interface CardsProps {
   children?: ReactNode;
@@ -26,22 +27,15 @@ const Cards: FC<CardsProps> = () => {
   const wordsQuiz = useAppSelector((state) => state.cards.cards);
 
   useEffect(() => {
+    const getCardHandler = async () => {
+      dispatch(addCards(await getCardWords(wordsArr)));
+    };
     getCardHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (user.isAuth && user.isConnect) {
-  //     console.log("useEffect Cards state ", wordsArr);
-  //     updateLocalStoreWordsArr(wordsArr);
-  //     updWordInFireBase(user.login, wordsArr);
-  //   }
-  //   // зависимость от wordsArr - при его изменении - автоматом обновляется локал стор слов
-  //   // и записівается обновленній стор в базу в облаке
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [wordsArr]);
-
   const getCardHandler = async () => {
+    user.isSound && nextSound.play();
     dispatch(addCards(await getCardWords(wordsArr)));
   };
 
@@ -61,9 +55,8 @@ const Cards: FC<CardsProps> = () => {
           <div className="d-flex flex-column align-items-center mt-1">
             <h6>Choose the meaning of the word:</h6>
             <h2>{ucFirst(wordsQuiz.hiddenWord.word)}</h2>
-            {/* <div>Right: {wordsQuiz.hiddenWord.rating} from 7</div> */}
             <div className="stars">
-              <Stars word={wordsQuiz.hiddenWord} random={() => randomN()} />
+              <Stars word={wordsQuiz.hiddenWord} />
             </div>
           </div>
           <div className="d-flex flex-wrap justify-content-center">
@@ -71,6 +64,8 @@ const Cards: FC<CardsProps> = () => {
               <VariantWordCard
                 key={randomN()}
                 word={item}
+                soundToggle={user.isSound}
+                audio={answerSound}
                 // bgColor={getRndBgColor(bgColorArr)}
                 bgColor={"bg-secondary"}
               />

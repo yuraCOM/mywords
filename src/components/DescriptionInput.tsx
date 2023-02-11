@@ -1,19 +1,31 @@
+import { Word } from "../store/types";
+
 interface DescriptionInputProps {
-  value: string;
-  setValue: (value: string) => void;
+  word: Word;
+  value?: string;
+  description?: any;
+  setWord: (e: any) => void;
 }
 
 const DescriptionInput: React.FC<DescriptionInputProps> = ({
+  word,
   value,
-  setValue,
+  setWord,
+  description,
 }) => {
+  function updHandler(e: any): void {
+    setWord({ ...word, [description]: e.target.value });
+  }
+
   return (
     <label>
       <input
         className="form-control"
         placeholder="description"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e: any) =>
+          setWord({ ...word, [description]: e.target.value })
+        }
       />
     </label>
   );
