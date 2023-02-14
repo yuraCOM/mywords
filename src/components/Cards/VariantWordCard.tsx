@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateCardsAnswer } from "../../store/cardsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -45,7 +45,7 @@ const VariantWordCard: FC<VariantWordCardProps> = ({
 
   return (
     <div
-      className={`card text-white bg-primary mb-3 m-2 bg-gradient ${bgColor} mock-card  text-center`}
+      className={`card  text-white bg-primary mb-3 m-2 bg-gradient ${bgColor} mock-card  text-center`}
       onClick={() => checkWord(word)}
     >
       <div className="card-body">

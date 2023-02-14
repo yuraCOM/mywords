@@ -2,7 +2,13 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { addCards } from "../../store/cardsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { CARDS_ROUTE, nextSound, verno, wrong } from "../../tools/constant";
+import {
+  CARDS_ROUTE,
+  nextSound,
+  stopAudio,
+  verno,
+  wrong,
+} from "../../tools/constant";
 import { meanWords, ucFirst } from "../../tools/serveses";
 import Stars from "../../UI/Stars";
 import { getCardWords } from "./cardsTools";
@@ -28,9 +34,16 @@ const Answer: FC = () => {
 
   async function nextCardHandler() {
     dispatch(addCards(await getCardWords(wordsArr)));
+    stopAudio(verno);
+    stopAudio(wrong);
     userState.isSound && nextSound.play();
     history(CARDS_ROUTE);
   }
+
+  // function stopAudio(audio: any) {
+  //   audio.pause();
+  //   audio.currentTime = 0;
+  // }
 
   return (
     <div className="answer d-flex justify-content-center flex-column">

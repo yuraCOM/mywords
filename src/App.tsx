@@ -27,9 +27,10 @@ function App() {
   async function fetchData(data: LocalStore) {
     if (data.login) {
       // читаем из локал стора данніе юзера
-      // делаем запрос в облоко за его данными и берем его словарь
+      // делаем запрос в облоко FB за его данными и берем его словарь from FireBase
       //и сохраняем в стор
       const user: any = await readOneUserFromDB(data.login, data.password);
+
       if (!user) {
         dispatch(isConnect({ isConnect: false }));
         updLocalStoreIsConnect(false);

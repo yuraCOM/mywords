@@ -17,10 +17,24 @@ export const bgColorArr = [
   //   "bg-light",
 ];
 
+//select type
+export let sortType = [
+  { value: "wordUp", name: "Sort Abc > Z" },
+  { value: "wordDown", name: "Sort Zyw > A" },
+  { value: "dateDown", name: "Sort date up" },
+  { value: "dateUp", name: "Sort date down" },
+  { value: "rating", name: "Sort by stars" },
+];
+
+//audio
 export const answerSound = new Audio(
   require("../../src/assets/sounds/multiashnogo-nagatiya.mp3")
 );
-
 export const nextSound = new Audio(require("../../src/assets/sounds/lift.mp3"));
 export const verno = new Audio(require("../../src/assets/sounds/verno.mp3"));
 export const wrong = new Audio(require("../../src/assets/sounds/wrong.mp3"));
+
+export function stopAudio(audio) {
+  audio.pause();
+  audio.currentTime = 0;
+}

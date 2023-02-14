@@ -35,6 +35,14 @@ const WordFixModal: FC<WordFixModaProps> = ({
     handleClose();
   }
 
+  function ratingHandker(rating: number) {
+    if (rating < 0 || rating > 7) {
+      alert("Rating must be between 0 and 7");
+    } else {
+      setNewWord({ ...newWord, rating: Number(rating) });
+    }
+  }
+
   return (
     <Modal show={show} onHide={handleClose} className="modal-fix-word">
       <Modal.Header closeButton>
@@ -49,16 +57,15 @@ const WordFixModal: FC<WordFixModaProps> = ({
             value={newWord.word || ""}
             onChange={(e) => setNewWord({ ...newWord, word: e.target.value })}
           />
-          <div className="d-flex">
-            Stars:
+          <div className="d-flex flex-column">
+            <p>Stars (between 0 and 7):</p>
+
             <Stars word={newWord} />
           </div>
           <input
             className="form-control"
             value={newWord.rating || ""}
-            onChange={(e) =>
-              setNewWord({ ...newWord, rating: Number(e.target.value) })
-            }
+            onChange={(e) => ratingHandker(Number(e.target.value))}
           />
 
           <p>Type:</p>

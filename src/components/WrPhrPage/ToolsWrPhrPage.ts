@@ -1,5 +1,5 @@
+import { Word } from "./../../store/types";
 import moment from "moment";
-import { Word } from "../../store/types";
 
 //time add word
 export const dateWord = (data: string) => {
@@ -8,10 +8,11 @@ export const dateWord = (data: string) => {
 };
 
 export const getFindWord = (e: any, wordsArr: Word[]): Word[] => {
+  console.log("getFindWord");
   let filteredArr: Word[] = [];
   let findWord = e.target.value;
   if (findWord.length) {
-    var reg = new RegExp(`^${findWord.toLowerCase()}`);
+    let reg = new RegExp(`^${findWord.toLowerCase()}`);
     wordsArr.forEach((item) => {
       if (reg.test(item.word.toLowerCase())) {
         filteredArr.push(item);
@@ -22,4 +23,35 @@ export const getFindWord = (e: any, wordsArr: Word[]): Word[] => {
     filteredArr = wordsArr;
   }
   return filteredArr;
+};
+
+//sort
+export const getSortedArr = (sort: string, wordsArr: Word[]): Word[] => {
+  let sortedWords: Word[] = [];
+  if (sort === "wordUp") {
+    sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
+      a.word.localeCompare(b.word)
+    );
+  }
+  if (sort === "wordDown") {
+    sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
+      b.word.localeCompare(a.word)
+    );
+  }
+  if (sort === "rating") {
+    sortedWords = [...wordsArr].sort((a: Word, b: Word) => b.rating - a.rating);
+  }
+  if (sort === "dateUp") {
+    sortedWords = [...wordsArr].sort(
+      (a: Word, b: Word) =>
+        Number(b.wordId.slice(5)) - Number(a.wordId.slice(5))
+    );
+  }
+  if (sort === "dateDown") {
+    sortedWords = [...wordsArr].sort(
+      (a: Word, b: Word) =>
+        Number(a.wordId.slice(5)) - Number(b.wordId.slice(5))
+    );
+  }
+  return sortedWords;
 };

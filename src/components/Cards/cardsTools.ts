@@ -30,6 +30,7 @@ export async function getCardWords(db: Word[]): Promise<CardWordsQuiz> {
 
     const starsArr = getStarsArr(CardWordsQuiz.hiddenWord.rating);
     CardWordsQuiz.stars = starsArr;
+    CardWordsQuiz.answer = false;
 
     return CardWordsQuiz;
   }

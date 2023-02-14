@@ -21,9 +21,19 @@
 }
 
 @media (min-width: 320px) {
+  .cards {
+    margin-top: 5px;
+  }
   .cards .mock-card {
     width: 100%;
     min-height: min-content;
+  }
+
+  .cards .stars img {
+    width: 15px;
+  }
+  .cards h2 {
+    margin-bottom: 0;
   }
 }
 
@@ -31,5 +41,8 @@
   .cards .mock-card {
     width: 100%;
     min-height: min-content;
+  }
+  .cards .stars img {
+    width: 15px;
   }
 }

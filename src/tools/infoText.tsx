@@ -1,10 +1,12 @@
 export type infoBlock = {
   bgColor: string;
   head?: string;
-  text: string;
+  text?: string;
   text1?: string;
   text2?: string;
   text3?: string;
+  link?: string;
+  link2?: string;
 };
 
 export const startInfoText: infoBlock[] = [
@@ -36,6 +38,14 @@ export const startInfoText: infoBlock[] = [
   {
     bgColor: "bg-danger",
     head: "Test Login.",
-    text: "Try programm with test login: 11111, password: 11111",
+    text: "Try programm with test data:",
+    text1: "Login: 11111",
+    text2: "Password: 11111",
+  },
+  {
+    bgColor: "bg-primary",
+    head: "***",
+    link: "https://yuracom.github.io/CV10-12-2021/",
+    link2: "https://github.com/yuraCOM/mywords",
   },
 ];

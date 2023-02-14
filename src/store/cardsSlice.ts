@@ -2,7 +2,7 @@ import { CardWordsQuiz } from "./interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
-  cards: {} as CardWordsQuiz,
+  cards: { answer: false } as CardWordsQuiz,
 };
 
 const cardsSlice = createSlice({

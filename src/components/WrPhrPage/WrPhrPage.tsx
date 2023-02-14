@@ -1,5 +1,4 @@
 // Страница всего словаря
-
 import { ChangeEvent, FC, ReactNode, useEffect, useState } from "react";
 import "./wrPhrPageStyle.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -11,22 +10,28 @@ import Stars from "../../UI/Stars";
 import MySelect from "../../UI/MySelect";
 import WarningDisconect from "../../UI/WarningDisconect";
 import MyModal from "../../UI/MyModal";
-import { dateWord, getFindWord } from "./ToolsWrPhrPage";
+import { dateWord, getFindWord, getSortedArr } from "./ToolsWrPhrPage";
 import WordFixModal from "./wordFixModal";
+import { Spinner } from "react-bootstrap";
+import { sortType } from "../../tools/constant";
 
 interface WrPhrPageProps {
   children?: ReactNode;
 }
+
 const WrPhrPage: FC<WrPhrPageProps> = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userAuthorization);
-
   const wordsArr = useAppSelector((state) => state.words.words);
 
   const [selectedSort, setSelectedSort] = useState("");
 
-  const [findWord, setFineWord] = useState("");
-  const [findWordsArr, setFindWorsdArr] = useState(wordsArr);
+  const [findWord, setFindWord] = useState("");
+
+  //findWordsArr - построение идет по этом массиву и сортировка и поиск
+  const [findWordsArr, setFindWorsdArr] = useState([] as Word[]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const delWord = async (word: Word) => {
     let isDelete = window.confirm("Are you sure? Delete word?");
@@ -39,51 +44,39 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
   //modal
   const [fixedWord, setFixedWord] = useState({} as Word);
   const [show, setShow] = useState(false);
+
   const handleClose = () => {
     setShow(false);
     setFixedWord({} as Word);
   };
+
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    setFindWorsdArr(wordsArr);
+    setIsLoading(true);
+    setTimeout(() => {
+      setFindWorsdArr(wordsArr);
+      setIsLoading(false);
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setFindWorsdArr(wordsArr);
+      setIsLoading(false);
+    }, 500);
   }, [wordsArr]);
 
-  const sortWords = (sort: string) => {
+  const sortWords = async (sort: string) => {
     setSelectedSort(sort);
-    let sortedWords: Word[] = [];
-    if (sort === "wordUp") {
-      sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
-        a.word.localeCompare(b.word)
-      );
-    }
-    if (sort === "wordDown") {
-      sortedWords = [...wordsArr].sort((a: Word, b: Word) =>
-        b.word.localeCompare(a.word)
-      );
-    }
-    if (sort === "rating") {
-      sortedWords = [...wordsArr].sort(
-        (a: Word, b: Word) => b.rating - a.rating
-      );
-    }
-    if (sort === "dateUp") {
-      sortedWords = [...wordsArr].sort(
-        (a: Word, b: Word) =>
-          Number(b.wordId.slice(5)) - Number(a.wordId.slice(5))
-      );
-    }
-    if (sort === "dateDown") {
-      sortedWords = [...wordsArr].sort(
-        (a: Word, b: Word) =>
-          Number(a.wordId.slice(5)) - Number(b.wordId.slice(5))
-      );
-    }
+    //wordsArr - первоначальный чистый массив слов!!!!
+    let sortedWords = getSortedArr(sort, wordsArr);
     setFindWorsdArr(sortedWords);
   };
 
   function wordFindHandler(e: ChangeEvent<HTMLInputElement>): void {
-    setFineWord(e.target.value);
+    setFindWord(e.target.value);
     let filteredArr = getFindWord(e, wordsArr);
     setFindWorsdArr(filteredArr);
     setSelectedSort("");
@@ -97,18 +90,12 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
   return (
     <div>
       {!user.isConnect && <WarningDisconect />}
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center search">
         <MySelect
           onChange={sortWords}
           value={selectedSort}
           defaultValue="Sort by..."
-          options={[
-            { value: "wordUp", name: "Sort Abc > Z" },
-            { value: "wordDown", name: "Sort Zyw > A" },
-            { value: "dateDown", name: "Sort date up" },
-            { value: "dateUp", name: "Sort date down" },
-            { value: "rating", name: "Sort by stars" },
-          ]}
+          options={sortType}
         />
         <label>
           <input
@@ -119,6 +106,13 @@ const WrPhrPage: FC<WrPhrPageProps> = () => {
           />
         </label>
       </div>
+      {isLoading && (
+        <div className="d-flex justify-content-center">
+          <Spinner animation="border" variant="success" />
+        </div>
+      )}
+
+      {!findWordsArr.length && !isLoading && <h4>Not found...</h4>}
 
       {wordsArr &&
         findWordsArr.map((word): any => (

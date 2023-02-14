@@ -13,10 +13,6 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({
   setWord,
   description,
 }) => {
-  function updHandler(e: any): void {
-    setWord({ ...word, [description]: e.target.value });
-  }
-
   return (
     <label>
       <input

@@ -7,6 +7,7 @@ import { isConnect } from "../../store/userAuthorizationSlice";
 import { addWord } from "../../store/wordsSlice";
 import { randomN } from "../../tools/random";
 import { ucFirst } from "../../tools/serveses";
+import MyToast from "../../UI/Toast";
 import WarningDisconect from "../../UI/WarningDisconect";
 import DescriptionInput from "../DescriptionInput";
 import SelectTypeWord from "./SelectTypeWord";
@@ -23,6 +24,8 @@ const NewWordAddForm: React.FC = () => {
   const [filteredWordHelp, setFilteredWordHelp] = useState(Array<Word>);
 
   const [spinner, setSpinner] = useState(false);
+
+  const [showTost, setShowTost] = useState(false);
 
   const wordHandler = (e: any) => {
     setWord({ ...word, word: e.target.value });
@@ -71,11 +74,12 @@ const NewWordAddForm: React.FC = () => {
         dispatch(isConnect(false));
       } else {
         setSpinner(true);
-
         dispatch(addWord(newWord)); // в стор
         await addWordInFireBase(userLogin, newWord); // добавили в облако
-        setWord({} as Word);
+        setShowTost(true);
         setSpinner(false);
+        setFilteredWordHelp([]);
+        setWord({} as Word);
       }
     }
   };
@@ -133,9 +137,15 @@ const NewWordAddForm: React.FC = () => {
           Add Word/Phrase
         </button>
       </div>
+      <MyToast
+        txt={`new word added!`}
+        show={showTost}
+        setShow={setShowTost}
+        bg="info"
+      />
       <div>
         {filteredWordHelp.map((word, index) => (
-          <div key={randomN() + "word"} className=" d-flex">
+          <div key={randomN() + "word"} className="d-flex">
             <p className="m-0">
               {word.word} - {word.meanOne}
             </p>

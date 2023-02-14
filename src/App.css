@@ -26,18 +26,37 @@
   top: 30%;
 }
 
+/*  media ----------------------------------------------------*/
 @media (min-width: 320px) {
   .App .header a {
-    margin: 5px;
+    margin: 4px;
+  }
+  .App .header button {
+    padding: 5px;
   }
   .routers {
-    padding-top: 115px;
+    padding-top: 100px;
   }
 }
 
-@media (min-width: 480px) {
+@media (min-width: 375px) {
+  .App .header a {
+    margin: 4px;
+  }
   .routers {
-    padding-top: 115px;
+    padding-top: 100px;
+  }
+  .cards .card .card-body {
+    padding: 5px;
+  }
+}
+
+@media (min-width: 425px) {
+  .routers {
+    padding-top: 100px;
+  }
+  .cards .card .card-body {
+    padding: 16px;
   }
 }
 

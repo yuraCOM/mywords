@@ -34,6 +34,7 @@ export const userNew2 = {
   words: [sampleWord, sampleWord],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let x = [
   {
     type: "word",
